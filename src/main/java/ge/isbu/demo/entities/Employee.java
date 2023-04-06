@@ -9,6 +9,8 @@ import java.util.Date;
 public class Employee {
 
     @Id
+    @SequenceGenerator(name = "EMPLOYEES_SEQ", sequenceName = "EMPLOYEES_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "EMPLOYEES_SEQ")
     @Column(name = "EMPLOYEE_ID")
     private Long employeeId;
 

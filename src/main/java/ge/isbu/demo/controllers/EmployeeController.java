@@ -1,12 +1,10 @@
 package ge.isbu.demo.controllers;
 
+import ge.isbu.demo.dto.AddEmployee;
 import ge.isbu.demo.entities.Employee;
 import ge.isbu.demo.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,6 +23,11 @@ public class EmployeeController {
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = {"application/json"})
     public Employee getById(@PathVariable Long id) throws Exception {
         return employeeService.getById(id);
+    }
+
+    @RequestMapping(value = "/add", method = RequestMethod.POST, produces = {"application/json"})
+    public Employee add(@RequestBody AddEmployee addEmployee) throws Exception {
+        return employeeService.add(addEmployee);
     }
 
 }
