@@ -2,9 +2,12 @@ package ge.isbu.demo.controllers;
 
 import ge.isbu.demo.Util.GeneralUtil;
 import ge.isbu.demo.dto.AddEmployee;
+import ge.isbu.demo.dto.SearchEmployee;
+import ge.isbu.demo.dto.request.RequestData;
 import ge.isbu.demo.entities.Employee;
 import ge.isbu.demo.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Slice;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
@@ -37,6 +40,11 @@ public class EmployeeController {
     public Employee edit(@PathVariable Long id, @RequestBody AddEmployee addEmployee) throws Exception {
         GeneralUtil.checkRequiredProperties(addEmployee, Arrays.asList("firstName", "lastName", "departmentId"));
         return employeeService.edit(id, addEmployee);
+    }
+
+    @RequestMapping(value = "/search", method = RequestMethod.POST, produces = {"application/json"})
+    public Slice<Employee> search(@RequestBody RequestData<SearchEmployee> rd) {
+        return employeeService.search(rd.getData(), rd.getPaging());
     }
 
 }

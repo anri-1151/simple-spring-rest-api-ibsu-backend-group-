@@ -2,11 +2,17 @@ package ge.isbu.demo.services;
 
 import ge.isbu.demo.Util.GeneralUtil;
 import ge.isbu.demo.dto.AddEmployee;
+import ge.isbu.demo.dto.SearchEmployee;
+import ge.isbu.demo.dto.request.Paging;
 import ge.isbu.demo.entities.Department;
 import ge.isbu.demo.entities.Employee;
 import ge.isbu.demo.repositories.EmployeeRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -55,4 +61,14 @@ public class EmployeeService {
             }
             return employeeRepository.save(employee);
     }
+
+    public Slice<Employee> search(SearchEmployee searchEmployee, Paging paging) {
+        String name = null;
+        if (searchEmployee.getName() != null && !searchEmployee.getName().equals("")) {
+            name = "%" + searchEmployee.getName() + "%";
+        }
+        Pageable pageable = PageRequest.of(paging.getPage(), paging.getSize(), Sort.by("hire_date").descending());
+        return employeeRepository.search(searchEmployee.getDepartmentId(), name, pageable);
+    }
+
 }
