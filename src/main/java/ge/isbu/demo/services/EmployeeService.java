@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -31,7 +32,7 @@ public class EmployeeService {
     }
 
     public Employee getById(Long id) throws Exception {
-        return employeeRepository.findById(id).orElseThrow(() -> new Exception("RECORD_NOT_FOUND"));
+        return employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("RECORD_NOT_FOUND"));
     }
 
     @Transactional
@@ -52,7 +53,7 @@ public class EmployeeService {
 
     @Transactional
     public Employee edit(Long id, AddEmployee addEmployee) throws Exception {
-            Employee employee = employeeRepository.findById(id).orElseThrow(() -> new Exception("EMPLOYEE_NOT_FOUND"));
+            Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("EMPLOYEE_NOT_FOUND"));
             //update employee data
             GeneralUtil.getCopyOf(addEmployee, employee);
             if (addEmployee.getDepartmentId() != null && !addEmployee.getDepartmentId().equals(employee.getDepartment().getDepartmentId())) {
