@@ -17,13 +17,23 @@ public class Token {
     @Enumerated(EnumType.STRING)
     public TokenType tokenType = TokenType.BEARER;
 
-    public boolean revoked;
+    public boolean revoked = false;
 
-    public boolean expired;
+    public boolean expired = false;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     public User user;
+
+    public Token() {}
+
+    public Token(String token,  User user) {
+        this.token = token;
+        this.tokenType = TokenType.BEARER;
+        this.revoked = false;
+        this.expired = false;
+        this.user = user;
+    }
 
     public Integer getId() {
         return id;

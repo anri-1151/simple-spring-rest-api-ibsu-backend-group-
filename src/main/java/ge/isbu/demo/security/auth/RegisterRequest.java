@@ -1,13 +1,15 @@
 package ge.isbu.demo.security.auth;
 
 
-
+import ge.isbu.demo.entities.enums.Role;
 
 public class RegisterRequest {
     private String firstname;
     private String lastname;
     private String email;
     private String password;
+
+    private Role role;
 
     public String getFirstname() {
         return firstname;
@@ -39,5 +41,13 @@ public class RegisterRequest {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 }

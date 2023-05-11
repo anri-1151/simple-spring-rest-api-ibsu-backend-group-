@@ -5,6 +5,8 @@ import ge.isbu.demo.Util.GeneralUtil;
 import ge.isbu.demo.entities.User;
 import ge.isbu.demo.repositories.UserRepository;
 import ge.isbu.demo.security.config.JwtService;
+import ge.isbu.demo.security.token.Token;
+import ge.isbu.demo.security.token.TokenRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,11 +20,14 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationService(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager) {
+    private final TokenRepository tokenRepository;
+
+    public AuthenticationService(UserRepository repository, PasswordEncoder passwordEncoder, JwtService jwtService, AuthenticationManager authenticationManager, TokenRepository tokenRepository) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
+        this.tokenRepository = tokenRepository;
     }
 
     public AuthenticationResponse register(RegisterRequest request) throws Exception {
@@ -31,6 +36,7 @@ public class AuthenticationService {
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         repository.save(user);
         var jwtToken = jwtService.generateToken(user);
+        tokenRepository.save(new Token(jwtToken, user));
         return new AuthenticationResponse(jwtToken);
     }
 
@@ -44,6 +50,7 @@ public class AuthenticationService {
         var user = repository.findByEmail(request.getEmail())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
+        tokenRepository.save(new Token(jwtToken, user));
         return new AuthenticationResponse(jwtToken);
     }
 }
